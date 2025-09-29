@@ -1,16 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Jobs from "./pages/Jobs";
+import Apply from "./pages/Apply";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <div className="h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600 text-white text-4xl font-bold">
-      Tailwind is Working 🚀
-    </div>
-      </header>
-    </div>
+    <Router>
+      <Navbar />
+      <div className="p-6">
+        <Routes>
+          <Route path="/jobs" element={<Jobs />} />
+          <Route path="/apply" element={<Apply />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
-
 export default App;
