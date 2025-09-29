@@ -1,0 +1,7 @@
+{
+  "jobs": [
+    { "id": 1, "title": "Software Engineer", "desc": "Develop apps" },
+    { "id": 2, "title": "HR Manager", "desc": "Manage recruitment" }
+  ],
+  "applications": []
+}
