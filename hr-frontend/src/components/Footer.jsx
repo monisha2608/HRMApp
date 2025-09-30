@@ -11,7 +11,7 @@ function Footer() {
         <div className="flex space-x-8">
           <a href="/" className="hover:text-pink-500 transition font-semibold">Home</a>
           <a href="/team" className="hover:text-pink-500 transition font-semibold">Team</a>
-          <a href="/career" className="hover:text-pink-500 transition font-semibold">Career</a>
+          <a href="/jobs" className="hover:text-pink-500 transition font-semibold">Career</a>
           <a href="/contact" className="hover:text-pink-500 transition font-semibold">Contact</a>
         </div>
 

@@ -1,11 +1,11 @@
-import { NavLink } from "react-router-dom";
-
 function Navbar() {
+  const currentPath = window.location.pathname;
+
   const links = [
     { name: "Home", path: "/" },
     { name: "Team", path: "/team" },
-    { name: "Career", path: "/career" },
-    { name: "Contact Us", path: "/contact" },
+    { name: "Career", path: "/jobs" },
+    { name: "Contact Us", path: "/contact" }
   ];
 
   return (
@@ -16,18 +16,17 @@ function Navbar() {
 
       <ul className="flex space-x-8">
         {links.map((link, index) => (
-          <li key={index} className="relative group">
-            <NavLink
-              to={link.path}
-              className={({ isActive }) =>
-                `text-lg font-semibold px-4 py-2 rounded-md transition duration-300 ${
-                  isActive ? "bg-pink-600 text-black" : "text-gray-300"
-                }`
-              }
+          <li key={index}>
+            <a
+              href={link.path}
+              className={`text-lg font-semibold px-4 py-2 rounded-md transition duration-300 ${
+                currentPath === link.path
+                  ? "bg-pink-600 text-white"
+                  : "text-gray-300 hover:bg-pink-500/20"
+              }`}
             >
               {link.name}
-            </NavLink>
-            <span className="absolute inset-0 rounded-md bg-blue-500 opacity-0 group-hover:opacity-20 transition-all duration-300"></span>
+            </a>
           </li>
         ))}
       </ul>
