@@ -1,23 +1,24 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import Jobs from "./pages/Jobs";
-import Apply from "./pages/Apply";
-import Dashboard from "./pages/Dashboard";
+import Homepage from "./pages/Homepage";
+import Team from "./pages/Team";
+import Career from "./pages/Career";
+import Contact from "./pages/Contact";
 
 function App() {
   return (
     <Router>
       <Navbar />
-      <div className="p-6">
-        <Routes>
-          <Route path="/jobs" element={<Jobs />} />
-          <Route path="/apply" element={<Apply />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-        </Routes>
-      </div>
-      <Footer /> 
+      <Routes>
+        <Route path="/" element={<Homepage />} />
+        <Route path="/team" element={<Team />} />
+        <Route path="/career" element={<Career />} />
+        <Route path="/contact" element={<Contact />} />
+      </Routes>
+      <Footer/>
     </Router>
   );
 }
+
 export default App;
