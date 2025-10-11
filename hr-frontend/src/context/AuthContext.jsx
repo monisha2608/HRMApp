@@ -1,38 +1,69 @@
-import { createContext, useState, useContext } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import api from "../services/api";
+import { jwtDecode } from "jwt-decode";
+
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [users, setUsers] = useState([]); // ✅ registered users
+  const [user, setUser] = useState(null);   
+  const [loading, setLoading] = useState(true);
 
-  const register = (email, password) => {
-    const exists = users.find((u) => u.email === email);
-    if (exists) return false;
 
-    const newUser = { email, password };
-    setUsers((prev) => [...prev, newUser]);
-    setUser(newUser);
+  useEffect(() => {
+    const token = localStorage.getItem("auth_token");
+    const profile = localStorage.getItem("auth_profile");
+    if (token && profile) {
+      try {
+        const parsed = JSON.parse(profile);
+        setUser(parsed);
+      } catch {}
+    }
+    setLoading(false);
+  }, []);
+
+  const register = async ({ email, password, fullName, role }) => {
+    const res = await api.post("/api/auth/register", {
+      email,
+      password,
+      fullName,
+      role: role || "Candidate",
+    });
+    const { token, email: respEmail, fullName: respName, roles, expiresAtUtc } = res.data;
+
+    localStorage.setItem("auth_token", token);
+    localStorage.setItem(
+      "auth_profile",
+      JSON.stringify({ email: respEmail, fullName: respName, roles, expiresAtUtc })
+    );
+    setUser({ email: respEmail, fullName: respName, roles, expiresAtUtc });
     return true;
   };
 
-  const login = (email, password) => {
-    const found = users.find(
-      (u) => u.email === email && u.password === password
+  const login = async ({ email, password }) => {
+    const res = await api.post("/api/auth/login", { email, password });
+    const { token, email: respEmail, fullName, roles, expiresAtUtc } = res.data;
+
+   
+    try { jwtDecode(token); } catch {}
+
+    localStorage.setItem("auth_token", token);
+    localStorage.setItem(
+      "auth_profile",
+      JSON.stringify({ email: respEmail, fullName, roles, expiresAtUtc })
     );
-    if (found) {
-      setUser(found);
-      return true;
-    }
-    return false;
+    setUser({ email: respEmail, fullName, roles, expiresAtUtc });
+    return true;
   };
 
   const logout = () => {
+    localStorage.removeItem("auth_token");
+    localStorage.removeItem("auth_profile");
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, register, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, register, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

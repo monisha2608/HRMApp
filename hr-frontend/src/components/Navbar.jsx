@@ -1,35 +1,58 @@
-function Navbar() {
-  const currentPath = window.location.pathname;
+import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
-  const links = [
-    { name: "Home", path: "/" },
-    { name: "Team", path: "/team" },
-    { name: "Career", path: "/jobs" },
-    { name: "Contact Us", path: "/contact" }
-  ];
+function Navbar() {
+  const { user, logout } = useAuth();
 
   return (
-    <nav className="fixed top-0 left-0 w-full bg-black text-white px-8 py-4 flex items-center justify-between z-50 shadow-lg">
-      <h1 className="text-2xl font-extrabold text-[orangered]">
-        XYZ <span className="text-purple-500">Corporation</span>
-      </h1>
+    <nav className="flex items-center justify-between px-8 py-4 bg-black text-white shadow-md">
+      {/* Logo */}
+      <Link to="/" className="text-2xl font-bold text-pink-500">
+        XYZ<span className="text-purple-500">Corp</span>
+      </Link>
 
-      <ul className="flex space-x-8">
-        {links.map((link, index) => (
-          <li key={index}>
-            <a
-              href={link.path}
-              className={`text-lg font-semibold px-4 py-2 rounded-md transition duration-300 ${
-                currentPath === link.path
-                  ? "bg-pink-600 text-white"
-                  : "text-gray-300 hover:bg-pink-500/20"
-              }`}
+      {/* Nav Links */}
+      <div className="flex items-center space-x-8 text-lg font-semibold">
+        <Link to="/" className="hover:text-pink-400 transition">Home</Link>
+        <Link to="/team" className="hover:text-pink-400 transition">Team</Link>
+        <Link to="/jobs" className="hover:text-pink-400 transition">Careers</Link>
+        <Link to="/contact" className="hover:text-pink-400 transition">Contact Us</Link>
+
+        {/* Show candidate dashboard when logged in */}
+        {user?.roles?.includes("Candidate") && (
+          <Link
+            to="/dashboard"
+            className="px-4 py-2 bg-pink-600 hover:bg-pink-700 rounded-lg text-white transition"
+          >
+            Candidate Dashboard
+          </Link>
+        )}
+
+        {/* Auth Buttons */}
+        {user ? (
+          <button
+            onClick={logout}
+            className="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition"
+          >
+            Logout
+          </button>
+        ) : (
+          <>
+            <Link
+              to="/login"
+              className="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg transition"
             >
-              {link.name}
-            </a>
-          </li>
-        ))}
-      </ul>
+              Login
+            </Link>
+            <Link
+              to="/register"
+              className="px-4 py-2 bg-pink-600 hover:bg-pink-700 rounded-lg transition"
+            >
+              Register
+            </Link>
+          </>
+        )}
+      </div>
     </nav>
   );
 }

@@ -1,34 +1,35 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
-
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const success = login(form.email, form.password);
-    if (success) {
-      navigate("/dashboard"); // ✅ redirect after login
-    } else {
-      setError("Invalid credentials");
+    setError("");
+    setBusy(true);
+    try {
+      await login({ email: form.email, password: form.password });
+      navigate("/dashboard");
+    } catch (err) {
+      const msg = err?.response?.data?.error || "Invalid credentials";
+      setError(msg);
+    } finally {
+      setBusy(false);
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-black text-white">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-gray-900 p-8 rounded-lg shadow-lg w-full max-w-md"
-      >
+      <form onSubmit={handleSubmit} className="bg-gray-900 p-8 rounded-lg shadow-lg w-full max-w-md">
         <h1 className="text-3xl font-bold text-pink-500 mb-6 text-center">Login</h1>
 
         {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
@@ -59,10 +60,18 @@ function Login() {
 
         <button
           type="submit"
-          className="w-full py-3 bg-pink-600 hover:bg-pink-700 rounded-lg text-lg font-semibold transition"
+          disabled={busy}
+          className="w-full py-3 bg-pink-600 hover:bg-pink-700 rounded-lg text-lg font-semibold transition disabled:opacity-60"
         >
-          Login
+          {busy ? "Signing in..." : "Login"}
         </button>
+        <p className="text-center text-gray-400 mt-4">
+  Don’t have an account?{" "}
+  <Link to="/register" className="text-pink-500 hover:underline">
+    Register here
+  </Link>
+</p>
+
       </form>
     </div>
   );

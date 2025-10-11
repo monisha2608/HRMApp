@@ -14,13 +14,22 @@ function Jobs() {
     <div className="min-h-screen bg-black text-white py-16 px-8">
       <div className="flex items-center justify-between mb-14">
         <h1 className="text-4xl font-bold text-pink-500">Current Openings</h1>
-        
-        <button
-          onClick={() => navigate("/login")}
-          className="mt-7 px-6 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg text-lg font-semibold transition"
-        >
-          Candidate Login
-        </button>
+
+        <div className="flex space-x-4 mt-7">
+          <button
+            onClick={() => navigate("/login")}
+            className="px-6 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg text-lg font-semibold transition"
+          >
+            Candidate Login
+          </button>
+
+          <button
+            onClick={() => navigate("/register")}
+            className="px-6 py-2 bg-pink-600 hover:bg-pink-700 rounded-lg text-lg font-semibold transition"
+          >
+            Register
+          </button>
+        </div>
       </div>
 
       <div className="grid md:grid-cols-3 gap-8">

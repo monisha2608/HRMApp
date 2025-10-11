@@ -1,11 +1,26 @@
 import axios from "axios";
 
-const API_URL = "https://localhost:5001/api"; // your backend
+const api = axios.create({
+  baseURL: process.env.REACT_APP_API_BASE_URL || "https://localhost:7230",
+});
 
-export const getJobs = async () => {
-  return axios.get(`${API_URL}/jobs`);
-};
+// Attach token on every request
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("auth_token");
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
 
-export const applyJob = async (candidate) => {
-  return axios.post(`${API_URL}/candidates`, candidate);
-};
+// Optional: auto-logout on 401 (if you want)
+api.interceptors.response.use(
+  (res) => res,
+  (err) => {
+    if (err?.response?.status === 401) {
+      // localStorage.clear(); // uncomment if you want to hard sign-out
+      // window.location.href = "/login";
+    }
+    return Promise.reject(err);
+  }
+);
+
+export default api;

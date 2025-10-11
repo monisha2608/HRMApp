@@ -5,17 +5,17 @@ import { motion } from "framer-motion";
 import { useEffect } from "react";
 
 function CandidateDashboard() {
-  const { applications } = useApplications();
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+  const { applications = [] } = useApplications();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user) {
-      navigate("/login"); // ✅ redirect if not logged in
+    if (!loading && !user) {
+      navigate("/login");
     }
-  }, [user, navigate]);
+  }, [user, loading, navigate]);
 
-  if (!user) return null;
+  if (loading || !user) return null;
 
   return (
     <div className="min-h-screen bg-black text-white py-16 px-6">
@@ -39,10 +39,10 @@ function CandidateDashboard() {
             >
               <h2 className="text-2xl font-semibold mb-2">{job.title}</h2>
               <p className="text-gray-400 mb-4">
-                Applied on: {new Date(job.date).toLocaleDateString()}
+                Applied on: {job.date ? new Date(job.date).toLocaleDateString() : "—"}
               </p>
               <span className="px-3 py-1 rounded-lg text-sm font-semibold bg-yellow-600 text-white">
-                {job.status}
+                {job.status || "Under Review"}
               </span>
             </motion.div>
           ))}
