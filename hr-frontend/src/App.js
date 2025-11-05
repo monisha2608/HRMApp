@@ -14,8 +14,11 @@ import { AuthProvider } from "./context/AuthContext";
 import { ApplicationProvider } from "./context/ApplicationContext";
 import Register from "./pages/Register";
 
+import { ToastProvider } from "./context/ToastContext";
+
 function App() {
   return (
+    <ToastProvider>
     <AuthProvider>
       <ApplicationProvider>
         <BrowserRouter>
@@ -35,6 +38,7 @@ function App() {
         </BrowserRouter>
       </ApplicationProvider>
     </AuthProvider>
+    </ToastProvider>
   );
 }
 
