@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // must match your backend exactly (scheme + port)
-export const API_BASE = "https://localhost:7230";
+export const API_BASE = "https://hrapp-bgerb7f5ezfjb6ar.canadacentral-01.azurewebsites.net/";
 
 const api = axios.create({ baseURL: API_BASE });
 
