@@ -3,7 +3,10 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import api from "../services/api";
 import { useToast } from "../context/ToastContext";
 import { motion } from "framer-motion";
-import { FileUp, CheckCircle2, AlertCircle, User, Mail, Phone, FileText, X, Loader2 } from "lucide-react";
+import {
+  FileUp, CheckCircle2, AlertCircle, User, Mail, Phone,
+  FileText, X, Loader2, Briefcase
+} from "lucide-react";
 
 export default function Apply() {
   const [search] = useSearchParams();
@@ -11,6 +14,12 @@ export default function Apply() {
   const navigate = useNavigate();
   const { show } = useToast();
 
+  // job header
+  const [job, setJob] = useState(null);
+  const [jobErr, setJobErr] = useState("");
+  const [jobLoading, setJobLoading] = useState(!!jobId);
+
+  // form
   const [form, setForm] = useState({
     fullName: "",
     email: "",
@@ -23,6 +32,26 @@ export default function Apply() {
   const [serverMsg, setServerMsg] = useState("");
   const [dragOver, setDragOver] = useState(false);
   const fileInputRef = useRef(null);
+
+  // ---- job fetch (for nice header) ----
+  useEffect(() => {
+    let on = true;
+    if (!jobId) return;
+    (async () => {
+      try {
+        setJobLoading(true);
+        const res = await api.get(`/api/jobs/${jobId}`);
+        if (!on) return;
+        setJob(res.data);
+      } catch (e) {
+        if (!on) return;
+        setJobErr(e?.response?.status === 404 ? "Job not found." : "Failed to load job.");
+      } finally {
+        if (on) setJobLoading(false);
+      }
+    })();
+    return () => { on = false; };
+  }, [jobId]);
 
   // ---- helpers ----
   const onChange = (key, val) => {
@@ -44,18 +73,19 @@ export default function Apply() {
 
   const validate = () => {
     const e = {};
+    if (!jobId) e.jobId = "Missing job id.";
     if (!form.fullName.trim()) e.fullName = "Full name is required";
     if (!form.email.trim()) e.email = "Email is required";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = "Enter a valid email";
     if (!form.phone.trim()) e.phone = "Phone is required";
-    else if (form.phone.replace(/\D/g, "").length < 10) e.phone = "Enter a 10‑digit phone";
+    else if (form.phone.replace(/\D/g, "").length < 10) e.phone = "Enter a 10-digit phone";
     if (!form.coverLetter.trim()) e.coverLetter = "Cover letter is required";
     if (!form.resume) e.resume = "Resume is required";
     setErrors(e);
     return Object.keys(e).length === 0;
   };
 
-  const allowExt = ["pdf", "doc", "docx"]; 
+  const allowExt = ["pdf", "doc", "docx"];
   const onFile = (f) => {
     setServerMsg("");
     if (!f) { setForm((p) => ({ ...p, resume: null })); return; }
@@ -88,9 +118,7 @@ export default function Apply() {
       fd.append("resume", form.resume);
 
       await api.post("/api/applications", fd, { headers: { "Content-Type": "multipart/form-data" } });
-
       show("Application submitted successfully!");
-      // clear draft
       try { localStorage.removeItem(draftKey); } catch {}
       navigate("/candidate-dashboard");
     } catch (err) {
@@ -105,24 +133,23 @@ export default function Apply() {
   // ---- cover letter helpers ----
   const CL_MAX = 2000;
   const clLeft = useMemo(() => Math.max(0, CL_MAX - form.coverLetter.length), [form.coverLetter]);
+  const clPct = useMemo(() => 100 - Math.floor((clLeft / CL_MAX) * 100), [clLeft]);
 
   // ---- autosave draft to localStorage ----
   const draftKey = useMemo(() => `apply:draft:${jobId ?? "unknown"}`, [jobId]);
 
   useEffect(() => {
-    // load draft once
     try {
       const raw = localStorage.getItem(draftKey);
       if (raw) {
         const d = JSON.parse(raw);
-        setForm({ ...form, ...d, resume: null }); // don't persist file blobs
+        setForm((prev) => ({ ...prev, ...d, resume: null })); // no file blobs
       }
     } catch {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [draftKey]);
 
   useEffect(() => {
-    // save draft when inputs change
     try {
       const { fullName, email, phone, coverLetter } = form;
       localStorage.setItem(draftKey, JSON.stringify({ fullName, email, phone, coverLetter }));
@@ -140,11 +167,40 @@ export default function Apply() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black text-white py-16 px-6">
-      <motion.header initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
-        <h1 className="text-3xl font-bold text-pink-500">Apply {jobId ? `• Job #${jobId}` : ""}</h1>
-        <p className="mt-2 text-slate-300">Please complete the form below. Supported resume types: PDF, DOC, DOCX (max 10 MB).</p>
+      {/* Header */}
+      <motion.header
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="max-w-3xl"
+      >
+        <div className="flex items-center gap-3">
+          <Briefcase className="h-6 w-6 text-pink-400" />
+          <h1 className="text-3xl font-bold text-pink-500">
+            Apply {jobId ? `• Job #${jobId}` : ""}
+          </h1>
+        </div>
+
+        {jobLoading ? (
+          <p className="mt-2 text-slate-400">Loading job…</p>
+        ) : jobErr ? (
+          <p className="mt-2 text-rose-300">{jobErr}</p>
+        ) : job ? (
+          <div className="mt-3 text-slate-300">
+            <div className="font-semibold">{job.title}</div>
+            <div className="text-sm text-slate-400">
+              {[job.department, job.location, job.employmentType].filter(Boolean).join(" • ")}
+            </div>
+          </div>
+        ) : null}
+
+        <p className="mt-3 text-slate-300">
+          Please complete the form below. Supported resume types: PDF, DOC, DOCX (max 10 MB).
+        </p>
+        {errors.jobId && <p className="mt-1 text-rose-400 text-sm">{errors.jobId}</p>}
       </motion.header>
 
+      {/* Form */}
       <motion.form
         onSubmit={onSubmit}
         initial={{ opacity: 0, y: 12 }}
@@ -234,6 +290,13 @@ export default function Apply() {
               required
             />
           </div>
+          {/* progress bar */}
+          <div className="mt-2 h-2 w-full rounded-full bg-white/10 overflow-hidden">
+            <div
+              className="h-2 bg-pink-600 transition-all"
+              style={{ width: `${clPct}%` }}
+            />
+          </div>
           {errors.coverLetter && <p className="mt-1 text-rose-400 text-sm">{errors.coverLetter}</p>}
         </label>
 
@@ -271,7 +334,9 @@ export default function Apply() {
                 <CheckCircle2 className="h-8 w-8 text-emerald-400" />
                 <div className="text-sm text-slate-200">
                   <span className="font-medium">{form.resume.name}</span>
-                  <span className="ml-2 text-slate-400">({(form.resume.size / (1024 * 1024)).toFixed(2)} MB)</span>
+                  <span className="ml-2 text-slate-400">
+                    ({(form.resume.size / (1024 * 1024)).toFixed(2)} MB)
+                  </span>
                 </div>
                 <button
                   type="button"

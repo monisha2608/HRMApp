@@ -10,7 +10,10 @@ function Navbar() {
   return (
     <nav className="flex items-center justify-between px-8 py-4 bg-black text-white shadow-md border-b border-gray-800">
       {/* Logo */}
-      <Link to="/" className="text-2xl font-bold text-pink-500 hover:scale-105 transition-transform">
+      <Link
+        to="/"
+        className="text-2xl font-bold text-pink-500 hover:scale-105 transition-transform"
+      >
         XYZ<span className="text-purple-500">Corp</span>
       </Link>
 
@@ -34,9 +37,7 @@ function Navbar() {
             <span>{link.label}</span>
             <span
               className={`absolute left-0 -bottom-1 h-[2px] bg-gradient-to-r from-pink-500 to-purple-500 transition-all duration-300 ${
-                isActive(link.to)
-                  ? "w-full"
-                  : "w-0 group-hover:w-full"
+                isActive(link.to) ? "w-full" : "w-0 group-hover:w-full"
               }`}
             ></span>
           </Link>
@@ -66,22 +67,25 @@ function Navbar() {
           </button>
         ) : (
           <>
+            {/* Login Button (Blue Gradient) */}
             <Link
               to="/login"
               className={`px-4 py-2 rounded-lg transition-transform transform hover:scale-105 ${
                 isActive("/login")
-                  ? "bg-purple-600 text-white shadow-lg shadow-purple-500/40"
-                  : "bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-fuchsia-600 hover:to-purple-600 text-white shadow-md shadow-purple-500/20"
+                  ? "bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg shadow-cyan-500/40"
+                  : "bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-cyan-500 hover:to-blue-600 text-white shadow-md shadow-cyan-500/20"
               }`}
             >
               Login
             </Link>
+
+            {/* Register Button (Pink-Orange Gradient) */}
             <Link
               to="/register"
               className={`px-4 py-2 rounded-lg transition-transform transform hover:scale-105 ${
                 isActive("/register")
-                  ? "bg-pink-600 text-white shadow-lg shadow-pink-500/40"
-                  : "bg-gradient-to-r from-pink-600 to-purple-600 hover:from-purple-600 hover:to-pink-600 text-white shadow-md shadow-pink-500/20"
+                  ? "bg-gradient-to-r from-pink-600 to-orange-500 text-white shadow-lg shadow-orange-500/40"
+                  : "bg-gradient-to-r from-pink-600 to-orange-500 hover:from-orange-500 hover:to-pink-600 text-white shadow-md shadow-pink-500/20"
               }`}
             >
               Register
