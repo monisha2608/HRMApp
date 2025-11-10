@@ -151,15 +151,7 @@ export default function Login() {
               <div className="h-px flex-1 bg-white/10" />
             </div>
 
-            {/* OAuth placeholder */}
-            <button
-              type="button"
-              className="inline-flex w-full items-center justify-center gap-3 rounded-2xl border border-white/15 bg-white/5 px-5 py-3 text-sm font-medium text-slate-200 transition hover:bg-white/10"
-              onClick={() => alert("Hook up Google OAuth here.")}
-            >
-              <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="h-5 w-5" />
-              Continue with Google
-            </button>
+            
           </form>
 
           {/* Sign up link */}
