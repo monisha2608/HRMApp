@@ -75,7 +75,7 @@ export default function Contact() {
       >
         <p className="flex items-center justify-center gap-2">
           <Mail className="h-5 w-5 text-pink-400" />
-          <span className="text-pink-400">support@xyzcorp.com</span>
+          <span className="text-pink-400">noreply.xyzhr@gmail.com</span>
         </p>
         <p className="flex items-center justify-center gap-2">
           <Phone className="h-5 w-5 text-pink-400" />

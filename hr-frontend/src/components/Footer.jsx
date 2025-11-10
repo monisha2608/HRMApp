@@ -27,7 +27,7 @@ function Footer() {
         {/* Social Icons */}
         <div className="flex space-x-6 text-2xl">
           <a
-            href="https://github.com"
+            href="https://github.com/monisha2608/HRMApp"
             target="_blank"
             rel="noreferrer"
             className="hover:text-pink-500 transition-transform transform hover:scale-110"
@@ -35,7 +35,7 @@ function Footer() {
             <i className="fab fa-github"></i>
           </a>
           <a
-            href="https://linkedin.com"
+            href="https://www.linkedin.com/in/saurav-roy-b0a695296"
             target="_blank"
             rel="noreferrer"
             className="hover:text-pink-500 transition-transform transform hover:scale-110"
@@ -43,7 +43,7 @@ function Footer() {
             <i className="fab fa-linkedin"></i>
           </a>
           <a
-            href="mailto:contact@xyzcorp.com"
+            href="mailto:noreply.xyzhr@gmail.com"
             className="hover:text-pink-500 transition-transform transform hover:scale-110"
           >
             <i className="fas fa-envelope"></i>
