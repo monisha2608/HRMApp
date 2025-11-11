@@ -1,2 +1,74 @@
-# HRMApp
+# 🖥️ XYZ HR Console – Frontend (React + Tailwind + Vercel)
 
+
+A responsive and modern recruitment portal built using **React**, **Tailwind CSS**, and **Framer Motion**.
+It allows candidates to browse jobs, apply online, and track application progress — all integrated with the XYZ HR Console backend (ASP.NET Core API).
+
+
+---
+
+
+## 🚀 Live Demo
+🔗 **Frontend (Vercel):** [https://your-frontend-url.vercel.app](#)
+🔗 **Backend (Azure API):** [https://your-backend.azurewebsites.net](#)
+
+
+---
+
+
+## ✨ Key Features
+- View open positions from the HR backend
+- Apply to jobs with resume uploads
+- Candidate dashboard for tracking applications
+- Framer Motion animations and modern design
+- Fully responsive layout optimized for desktop and mobile
+- Secure API communication with JWT Authentication
+
+
+---
+
+
+## 🧩 Tech Stack
+| Category | Technology |
+|-----------|-------------|
+| Framework | React 18 |
+| Styling | Tailwind CSS |
+| Animation | Framer Motion |
+| Routing | React Router DOM v6 |
+| Deployment | Vercel |
+| Icons | Lucide React |
+
+
+---
+
+
+## ⚙️ Environment Variables
+Create a `.env` file in your root directory:
+
+
+```bash
+REACT_APP_API_URL=https://your-backend.azurewebsites.net/api
+```
+
+
+---
+
+
+## 🧠 Folder Structure
+```
+src/
+├── components/
+├── pages/
+├── context/
+├── services/
+├── assets/
+├── App.jsx
+└── main.jsx
+```
+
+
+---
+
+
+## 🧑‍💻 Local Development
+---
