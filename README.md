@@ -9,7 +9,7 @@ It allows candidates to browse jobs, apply online, and track application progres
 
 
 ## 🚀 Live Demo
-🔗 **Frontend (Vercel):** [https://your-frontend-url.vercel.app](#)
+🔗 **Frontend (Vercel):** [[https://your-frontend-url.vercel.app](https://hrm-app-ten.vercel.app/)](#)
 🔗 **Backend (Azure API):** [https://your-backend.azurewebsites.net](#)
 
 
@@ -85,7 +85,7 @@ npm run dev
 ```
 
 
-Runs on: **http://localhost:5173**
+Runs on: **http://localhost:3000**
 
 
 ---
