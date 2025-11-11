@@ -9,9 +9,8 @@ It allows candidates to browse jobs, apply online, and track application progres
 
 
 ## 🚀 Live Demo
-🔗 **Frontend (Vercel):** [(https://hrm-app-ten.vercel.app/)](#)
-🔗 **Backend (Azure API):** [(https://hrapp-bgerb7f5ezfjb6ar.canadacentral-01.azurewebsites.net/hr/)](#)
-
+🔗 **Frontend (Vercel):** [https://hrm-app-ten.vercel.app/](#)
+🔗 **Backend (Azure API):** [https://your-backend.azurewebsites.net](#)
 
 ---
 
