@@ -10,7 +10,7 @@ It allows candidates to browse jobs, apply online, and track application progres
 
 ## 🚀 Live Demo
 🔗 **Frontend (Vercel):** [(https://hrm-app-ten.vercel.app/)](#)
-🔗 **Backend (Azure API):** [https://your-backend.azurewebsites.net](#)
+🔗 **Backend (Azure API):** [(https://hrapp-bgerb7f5ezfjb6ar.canadacentral-01.azurewebsites.net/hr/)](#)
 
 
 ---
@@ -47,7 +47,7 @@ Create a `.env` file in your root directory:
 
 
 ```bash
-REACT_APP_API_URL=https://your-backend.azurewebsites.net/api
+REACT_APP_API_URL=https://hrapp-bgerb7f5ezfjb6ar.canadacentral-01.azurewebsites.net/hr/
 ```
 
 
