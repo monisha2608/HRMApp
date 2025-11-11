@@ -26,6 +26,8 @@ export default function Apply() {
     phone: "",
     coverLetter: "",
     resume: null,
+    IsInternal: false,         // <-- consistent lowercase state
+    EmployeeNumber: ""
   });
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
@@ -81,6 +83,9 @@ export default function Apply() {
     else if (form.phone.replace(/\D/g, "").length < 10) e.phone = "Enter a 10-digit phone";
     if (!form.coverLetter.trim()) e.coverLetter = "Cover letter is required";
     if (!form.resume) e.resume = "Resume is required";
+    if (form.IsInternal && !form.EmployeeNumber.trim()) {
+      e.EmployeeNumber = "Employee number is required for internal candidates";
+    }
     setErrors(e);
     return Object.keys(e).length === 0;
   };
@@ -110,12 +115,15 @@ export default function Apply() {
     try {
       setSubmitting(true);
       const fd = new FormData();
-      fd.append("jobId", jobId ?? "");
-      fd.append("fullName", form.fullName.trim());
-      fd.append("email", form.email.trim());
-      fd.append("phone", form.phone.trim());
-      fd.append("coverLetter", form.coverLetter.trim());
-      fd.append("resume", form.resume);
+      fd.append("JobId", jobId ?? "");
+      fd.append("FullName", form.fullName.trim());
+      fd.append("Email", form.email.trim());
+      fd.append("Phone", form.phone.trim());
+      fd.append("CoverLetter", form.coverLetter.trim());
+      fd.append("Resume", form.resume);
+      // match DTO property names exactly:
+      fd.append("IsInternal", String(form.IsInternal));
+      fd.append("EmployeeNumber", form.EmployeeNumber?.trim() ?? "");
 
       await api.post("/api/applications", fd, { headers: { "Content-Type": "multipart/form-data" } });
       show("Application submitted successfully!");
@@ -151,10 +159,13 @@ export default function Apply() {
 
   useEffect(() => {
     try {
-      const { fullName, email, phone, coverLetter } = form;
-      localStorage.setItem(draftKey, JSON.stringify({ fullName, email, phone, coverLetter }));
+      const { fullName, email, phone, coverLetter, IsInternal, EmployeeNumber } = form;
+      localStorage.setItem(
+        draftKey,
+        JSON.stringify({ fullName, email, phone, coverLetter, IsInternal, EmployeeNumber })
+      );
     } catch {}
-  }, [form.fullName, form.email, form.phone, form.coverLetter, draftKey, form]);
+  }, [form.fullName, form.email, form.phone, form.coverLetter, form.IsInternal, form.EmployeeNumber, draftKey, form]);
 
   // ---- drag & drop ----
   const onDrop = (e) => {
@@ -270,6 +281,40 @@ export default function Apply() {
             </div>
             {errors.phone && <p className="mt-1 text-rose-400 text-sm">{errors.phone}</p>}
           </label>
+        </div>
+
+        {/* Internal Candidate */}
+        <div className="rounded-xl border border-white/10 bg-slate-900/50 p-4">
+          <label className="flex items-center gap-3">
+            <input
+              type="checkbox"
+              checked={form.IsInternal}
+              onChange={(e)=>onChange("IsInternal", e.target.checked)}
+              className="h-5 w-5 rounded border-white/20 bg-transparent accent-pink-600"
+            />
+            <span className="text-slate-200 font-medium">I am an internal candidate</span>
+          </label>
+
+          {form.IsInternal && (
+            <div className="mt-4">
+              <label htmlFor="employeeNumber" className="mb-2 block text-slate-200">
+                Employee Number
+              </label>
+              <div className={`flex items-center gap-3 rounded-xl border bg-slate-900/70 px-4 py-3 focus-within:ring-2 focus-within:ring-pink-500 ${errors.EmployeeNumber ? "border-rose-500/50" : "border-white/10"}`}>
+                <svg className="h-5 w-5 text-slate-400" viewBox="0 0 24 24" fill="none">
+                  <path d="M4 7h16M4 12h16M4 17h7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                </svg>
+                <input
+                  id="employeeNumber"
+                  className="w-full bg-transparent outline-none placeholder:text-slate-500"
+                  value={form.EmployeeNumber}
+                  onChange={(e)=>onChange("EmployeeNumber", e.target.value)}
+                  placeholder="e.g., EMP001234"
+                />
+              </div>
+              {errors.EmployeeNumber && <p className="mt-1 text-rose-400 text-sm">{errors.EmployeeNumber}</p>}
+            </div>
+          )}
         </div>
 
         {/* Cover Letter */}
