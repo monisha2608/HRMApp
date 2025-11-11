@@ -185,8 +185,8 @@ export default function Register() {
                 className="mt-0.5 h-4 w-4 rounded border-white/20 bg-slate-800 accent-pink-600"
               />
               <span>
-                I agree to the <a href="#" className="text-pink-400 hover:text-pink-300 underline decoration-dotted">Terms of Service</a> and
-                <a href="#" className="ml-1 text-pink-400 hover:text-pink-300 underline decoration-dotted">Privacy Policy</a>.
+                I agree to the <a  className="text-pink-400 hover:text-pink-300 underline decoration-dotted">Terms of Service</a> and
+                <a className="ml-1 text-pink-400 hover:text-pink-300 underline decoration-dotted">Privacy Policy</a>.
               </span>
             </label>
 
