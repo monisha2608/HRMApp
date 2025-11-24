@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import api, { API_BASE } from "../services/api";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { ArrowLeft, ArrowRight, Filter, Search, RefreshCw, FileText, ExternalLink, Briefcase } from "lucide-react";
 
 const STATUS_OPTIONS = [
@@ -55,6 +56,7 @@ export default function CandidateDashboard() {
 
   const params = useMemo(() => ({ page, size, status, sort, q: q.trim() || undefined }), [page, size, status, sort, q]);
   const totalPages = Math.max(1, Math.ceil(total / size));
+  const navigate = useNavigate();
 
   useEffect(() => {
     let mounted = true;
@@ -172,6 +174,22 @@ export default function CandidateDashboard() {
                       <ExternalLink className="h-4 w-4" /> View Job
                     </a>
                   )}
+                  {/* Onboarding badge/button for Hired only */}
+{a.status === "Hired" && (
+  <div className="mt-4 flex items-center justify-between gap-3">
+    <span className="text-xs text-emerald-300 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/40">
+      Onboarding started
+    </span>
+
+    <button
+      onClick={() => navigate(`/onboarding?applicationId=${a.id}`)}
+      className="text-xs inline-flex items-center gap-1 rounded-full bg-emerald-600/80 hover:bg-emerald-500 px-3 py-1 font-medium shadow-sm"
+    >
+      View Onboarding
+    </button>
+  </div>
+)}
+
                 </div>
               </motion.div>
             ))}

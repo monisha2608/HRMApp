@@ -13,6 +13,10 @@ import CandidateDashboard from "./pages/CandidateDashboard";
 import { AuthProvider } from "./context/AuthContext";
 import { ApplicationProvider } from "./context/ApplicationContext";
 import Register from "./pages/Register";
+import OnboardingList from "./pages/OnboardingList";
+import OnboardingNew from "./pages/OnboardingNew";
+import OnboardingPlan from "./pages/OnboardingPlan";
+import OnboardingPage from "./pages/OnboardingPage";
 
 import { ToastProvider } from "./context/ToastContext";
 
@@ -33,6 +37,9 @@ function App() {
             <Route path="/dashboard" element={<CandidateDashboard />} />
             <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} /> 
+              <Route path="/onboarding" element={<OnboardingPage />} />
+             
+
           </Routes>
           <Footer />
         </BrowserRouter>
